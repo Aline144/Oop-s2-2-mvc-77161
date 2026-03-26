@@ -2,8 +2,21 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using FoodSafetyInspectionTracker.Data;
 using FoodSafetyInspectionTracker.Data.DbInitializer;
+using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
+
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.WithProperty("Application", "FoodSafetyInspectionTracker")
+    .Enrich.WithProperty("Environment", builder.Environment.EnvironmentName)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
@@ -28,11 +41,15 @@ if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
 }
-else
+
+app.UseExceptionHandler("/Home/Error");
+
+if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -54,4 +71,16 @@ using (var scope = app.Services.CreateScope())
     await IdentitySeeder.SeedRolesAndAdminAsync(services);
 }
 
-app.Run();
+try
+{
+    Log.Information("Starting FoodSafetyInspectionTracker application");
+    app.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Application failed to start");
+}
+finally
+{
+    Log.CloseAndFlush();
+}
