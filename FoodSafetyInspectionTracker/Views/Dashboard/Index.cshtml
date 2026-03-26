@@ -1,0 +1,12 @@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h1>Dashboard</h1>
+
+<p>Welcome to the Food Safety Inspection Tracker dashboard.</p>
+
+@if (User.Identity != null && User.Identity.IsAuthenticated)
+{
+    <p>You are logged in as: @User.Identity.Name</p>
+} 

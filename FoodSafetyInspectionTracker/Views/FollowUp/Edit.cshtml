@@ -1,0 +1,38 @@
+@model FoodSafetyInspectionTracker.Models.FollowUp
+
+@{
+    ViewData["Title"] = "Edit Follow Up";
+}
+
+<h1>Edit Follow Up</h1>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group mb-3">
+        <label asp-for="InspectionId" class="form-label"></label>
+        <select asp-for="InspectionId" class="form-control" asp-items="ViewBag.InspectionId"></select>
+        <span asp-validation-for="InspectionId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="DueDate" class="form-label"></label>
+        <input asp-for="DueDate" type="date" class="form-control" />
+        <span asp-validation-for="DueDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Status" class="form-label"></label>
+        <select asp-for="Status" class="form-control" asp-items="Html.GetEnumSelectList<FoodSafetyInspectionTracker.Models.Enums.FollowUpStatus>()"></select>
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="ClosedDate" class="form-label"></label>
+        <input asp-for="ClosedDate" type="date" class="form-control" />
+        <span asp-validation-for="ClosedDate" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>

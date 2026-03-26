@@ -1,0 +1,41 @@
+@model IEnumerable<FoodSafetyInspectionTracker.Models.FollowUp>
+
+@{
+    ViewData["Title"] = "Follow Ups";
+}
+
+<h1>Follow Ups</h1>
+
+<p>
+    <a asp-action="Create">Create New Follow Up</a>
+</p>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Inspection</th>
+        <th>Premises</th>
+        <th>Due Date</th>
+        <th>Status</th>
+        <th>Closed Date</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.InspectionId</td>
+            <td>@item.Inspection?.Premises?.Name</td>
+            <td>@item.DueDate.ToShortDateString()</td>
+            <td>@item.Status</td>
+            <td>@(item.ClosedDate?.ToShortDateString() ?? "-")</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

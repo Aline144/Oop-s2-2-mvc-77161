@@ -1,0 +1,41 @@
+@model IEnumerable<FoodSafetyInspectionTracker.Models.Inspection>
+
+@{
+    ViewData["Title"] = "Inspections";
+}
+
+<h1>Inspections</h1>
+
+<p>
+    <a asp-action="Create">Create New Inspection</a>
+</p>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Premises</th>
+        <th>Inspection Date</th>
+        <th>Score</th>
+        <th>Outcome</th>
+        <th>Notes</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Premises?.Name</td>
+            <td>@item.InspectionDate.ToShortDateString()</td>
+            <td>@item.Score</td>
+            <td>@item.Outcome</td>
+            <td>@item.Notes</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
